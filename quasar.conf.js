@@ -19,7 +19,7 @@ module.exports = configure(function (ctx) {
     },
 
     // https://quasar.dev/quasar-cli/prefetch-feature
-    // preFetch: true,
+     preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -92,9 +92,22 @@ module.exports = configure(function (ctx) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
+      config: {
+        brand: {
+          primary: '#027BE3',
+          secondary: '#26A69A',
+          accent: '#9C27B0',
+
+          dark: '#1d1d1d',
+
+          positive: '#21BA45',
+          negative: '#C10015',
+          info: '#31CCEC',
+          warning: '#F2C037'
+        }
+      },
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives

@@ -1,13 +1,13 @@
-import axios, { AxiosInstance } from 'axios';
-import { boot } from 'quasar/wrappers';
+import Vue from 'vue'
+import axios from 'axios'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    $axios: AxiosInstance;
-  }
-}
+Vue.prototype.$axios = axios
+// ^ ^ ^ this will allow you to use this.$axios
+//       so you won't necessarily have to import axios in each vue file
 
-export default boot(({ Vue }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  Vue.prototype.$axios = axios;
-});
+const api = axios.create({ baseURL: 'http://drullo.test' })
+Vue.prototype.$api = api
+// ^ ^ ^ this will allow you to use this.$api
+//       so you can easily perform requests against your app's API
+
+export { axios, api }

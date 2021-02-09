@@ -2,10 +2,6 @@
   <q-layout>
     <q-page-container>
       <q-page class='flex flex-center'>
-        <div
-          id='particles-js'
-          :class="$q.dark.isActive ? 'dark_gradient' : 'normal_gradient'"
-        ></div>
         <q-btn
           color='white'
           class='absolute-top-right'
@@ -20,14 +16,13 @@
             $q.platform.is.mobile ? { width: '80%' } : { width: '30%' }
           "
         >
-          <q-img src='/statics/images/pharmacy.jpg'></q-img>
           <q-card-section>
             <q-avatar
               size='74px'
               class='absolute'
               style='top: 0;right: 25px;transform: translateY(-50%);'
             >
-              <img src='https://cdn.quasar.dev/img/boy-avatar.png' />
+              <img src='../assets/avatars/avatar.png' />
             </q-avatar>
             <div class='row no-wrap items-center'>
               <div class='col text-h6 ellipsis'>
@@ -37,33 +32,24 @@
           </q-card-section>
           <q-card-section>
             <q-form class='q-gutter-md'>
-              <q-input filled v-model='username' label='Username' lazy-rules />
+              <q-input filled v-model='username' label='Username' autocomplete='username' lazy-rules />
 
               <q-input
                 type='password'
                 filled
                 v-model='password'
                 label='Password'
+                autocomplete='password'
                 lazy-rules
               />
 
               <div>
                 <q-btn
                   label='Login'
-                  to='/dashboard'
                   type='button'
                   color='primary'
                   @click='loginNotify'
                 />
-
-                <a
-                  style='font-size: 30px;'
-                  class='float-right'
-                  href='https://github.com/sponsors/mayank091193'
-                  target='_blank'
-                  title='Donate'
-                ><i class='fas fa-heart' style='color: #eb5daa'></i
-                ></a>
               </div>
             </q-form>
           </q-card-section>
@@ -75,41 +61,77 @@
 
 <script lang='ts'>
 import { defineComponent } from '@vue/composition-api';
+import { api } from 'boot/axios';
+import { Quasar } from 'quasar';
 
 export default defineComponent({
   name: 'login',
-//  props: {
-  //  username: 'admin',
-  //  password: 'Admin@CRM'
-//  },
-  // loginNotify() {
-  //   this.$q.notify({
-  //     message: 'Login Successful'
-  //   });
-  // },
-  setup() {
+  data: [],
+  beforeCreate() {
+    this.$q.dark.set(true);
+    console.log(this.$q.dark.isActive); // true, false
+  },
 
+  props: {
+    username: {
+      type: String,
+      default: 'admin'
+    },
+    password: {
+      type: String,
+      default: 'Admin@CRM'
+    }
+  },
+  methods: {
+    loginNotify() {
+      this.loadData();
+      this.$q.notify({
+        message: 'Login Successful'
+      });
+    },
+
+    loadData() {
+      api.post('/user/login?_format=json', {
+        name: 'admin',
+        pass: 'finder-manse-UNSTRUNG-eldest'
+      })
+        .then((response) => {
+          this.data = response.data;
+          console.log('Log in try', response.data);
+
+        })
+        .catch(() => {
+          this.$q.notify({
+            color: 'negative',
+            position: 'top',
+            message: 'Loading failed',
+            icon: 'report_problem'
+          });
+        });
+    }
+
+  },
+  setup(props) {
+    const $q = Quasar;
+
+    // showing an example on a method, but
+    // can be any part of Vue script
+    function show() {
+      // prints out Quasar version
+      console.log(this.$q.version);
+      console.log('Login:', props);
+    }
+
+
+    return {
+      show
+    };
   }
 });
 </script>
 
 <style>
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-}
 
-.normal_gradient {
-  background: linear-gradient(145deg, rgb(74, 94, 137) 15%, #b61924 70%);
-}
-
-.dark_gradient {
-  background: linear-gradient(145deg, rgb(11, 26, 61) 15%, #4c1014 70%);
-}
 
 .login-form {
   position: absolute;
